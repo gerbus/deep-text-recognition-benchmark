@@ -121,6 +121,9 @@ def hierarchical_dataset(root, opt, select_data='/'):
                 dataset_log += f'{sub_dataset_log}\n'
                 dataset_list.append(dataset)
 
+    if not dataset_list:  # Check if dataset_list is empty
+        raise ValueError("dataset_list is empty. Please check your dataset configuration.")
+
     concatenated_dataset = ConcatDataset(dataset_list)
 
     return concatenated_dataset, dataset_log
@@ -206,8 +209,8 @@ class LmdbDataset(Dataset):
                     img = Image.new('L', (self.opt.imgW, self.opt.imgH))
                 label = '[dummy_label]'
 
-            if not self.opt.sensitive:
-                label = label.lower()
+            # if not self.opt.sensitive:
+            #     label = label.lower()
 
             # We only train and evaluate on alphanumerics (or pre-defined character set in train.py)
             out_of_char = f'[^{self.opt.character}]'
